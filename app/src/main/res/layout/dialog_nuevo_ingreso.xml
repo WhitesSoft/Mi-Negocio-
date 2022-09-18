@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/background_popup">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="10sp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:text="Nuevo Ingreso"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50sp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/ic_background_edit_text_input">
+
+            <ImageView
+                android:layout_width="25sp"
+                android:layout_height="25sp"
+                android:layout_gravity="center"
+                android:layout_marginStart="10sp"
+                android:src="@drawable/ic_money" />
+
+            <EditText
+
+                android:id="@+id/montoEditText"
+                android:layout_width="match_parent"
+                android:layout_height="50sp"
+                android:layout_marginStart="10sp"
+                android:background="@android:color/transparent"
+                android:ellipsize="none"
+                android:gravity="center_vertical"
+                android:hint="Monto"
+                android:inputType="numberDecimal"
+                android:paddingStart="10dp"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textColorHint="@color/colorHint"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50sp"
+            android:layout_marginTop="10sp"
+            android:background="@drawable/ic_background_edit_text_input">
+
+            <ImageView
+                android:layout_width="25sp"
+                android:layout_height="25sp"
+                android:layout_gravity="center"
+                android:layout_marginStart="10sp"
+                android:src="@drawable/ic_description" />
+
+            <EditText
+
+                android:id="@+id/descripcionEditText"
+                android:layout_width="match_parent"
+                android:layout_height="50sp"
+                android:layout_marginStart="10sp"
+                android:background="@android:color/transparent"
+                android:ellipsize="none"
+                android:gravity="center_vertical"
+                android:hint="Descripcion"
+                android:inputType="text"
+                android:paddingStart="10dp"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textColorHint="@color/colorHint"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50sp"
+            android:layout_marginTop="10sp"
+            android:background="@drawable/ic_background_edit_text_input">
+
+            <ImageView
+                android:layout_width="25sp"
+                android:layout_height="25sp"
+                android:layout_gravity="center"
+                android:layout_marginStart="10sp"
+                android:src="@drawable/ic_calendar" />
+
+            <EditText
+
+                android:id="@+id/fechaEditText"
+                android:layout_width="match_parent"
+                android:layout_height="50sp"
+                android:layout_marginStart="10sp"
+                android:background="@android:color/transparent"
+                android:clickable="false"
+                android:focusable="false"
+                android:ellipsize="none"
+                android:gravity="center_vertical"
+                android:hint="Fecha"
+                android:inputType="text"
+                android:paddingStart="10dp"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textColorHint="@color/colorHint"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50sp"
+            android:layout_marginTop="10sp"
+            android:background="@drawable/ic_background_edit_text_input">
+
+            <ImageView
+                android:layout_width="25sp"
+                android:layout_height="25sp"
+                android:layout_gravity="center"
+                android:layout_marginStart="10sp"
+                android:src="@drawable/ic_down" />
+
+
+            <Spinner
+                android:id="@+id/tipoEditText"
+                android:layout_width="match_parent"
+                android:layout_height="50sp"
+                android:background="@android:color/transparent"
+                android:clickable="true"
+                android:layout_marginStart="10dp"
+                android:editable="false"
+                android:ellipsize="none"
+                android:focusable="false"
+                android:scrollHorizontally="true"
+                android:singleLine="true" />
+
+        </LinearLayout>
+
+
+
+        <Button
+            android:id="@+id/aceptarButton"
+            android:layout_width="match_parent"
+            android:layout_height="50sp"
+            android:gravity="center"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="20sp"
+            android:background="@drawable/background_button"
+            android:text="Aceptar"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>

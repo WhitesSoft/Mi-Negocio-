@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Mi Negocio</string>
+    <string name="nuevo_ingreso">nuevo ingreso</string>
+    <string name="nuevo_gasto">nuevo gasto</string>
+
+
+
+    <string name="tipo_de_ingreso">Tipo</string>
+    <string-array name="opciones">
+        <item>Tipo</item>
+        <item>Tarjeta</item>
+        <item>Caja</item>
+    </string-array>
+</resources>

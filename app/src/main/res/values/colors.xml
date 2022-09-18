@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="verde">#249C0E</color>
+    <color name="rojo">#D81010</color>
+    <color name="primary_text">#565B65</color>
+    <color name="secundary_text">#9B9A9D</color>
+    <color name="background">#22272E</color>
+    <color name="background_claro">#2D333B</color>
+    <color name="white">#ffff</color>
+    <color name="black">#FF000000</color>
+    <color name="colorHint">#767676</color>
+    <color name="grayBackgroundTraslucent">#B3D5D5D5</color>
+</resources>
