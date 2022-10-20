@@ -11,9 +11,11 @@
         <entry key="..\:/Users/juandaniel/AndroidStudioProjects/MiNegocio/app/src/main/res/drawable/lista_opciones.xml" value="0.1865" />
         <entry key="..\:/Users/juandaniel/AndroidStudioProjects/MiNegocio/app/src/main/res/drawable/round_linear_layout.xml" value="0.182" />
         <entry key="..\:/Users/juandaniel/AndroidStudioProjects/MiNegocio/app/src/main/res/drawable/round_toolbar.xml" value="0.182" />
-        <entry key="..\:/Users/juandaniel/AndroidStudioProjects/MiNegocio/app/src/main/res/layout/activity_main.xml" value="0.2484375" />
+        <entry key="..\:/Users/juandaniel/AndroidStudioProjects/MiNegocio/app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="..\:/Users/juandaniel/AndroidStudioProjects/MiNegocio/app/src/main/res/layout/activity_splash_screen.xml" value="0.23333333333333334" />
+        <entry key="..\:/Users/juandaniel/AndroidStudioProjects/MiNegocio/app/src/main/res/layout/dialog_nuevo_gasto.xml" value="0.2484375" />
         <entry key="..\:/Users/juandaniel/AndroidStudioProjects/MiNegocio/app/src/main/res/layout/dialog_nuevo_ingreso.xml" value="0.24739583333333334" />
+        <entry key="..\:/Users/juandaniel/AndroidStudioProjects/MiNegocio/app/src/main/res/layout/item_row.xml" value="0.2484375" />
         <entry key="..\:/Users/juandaniel/AndroidStudioProjects/MiNegocio/app/src/main/res/layout/lista_opciones.xml" value="0.2484375" />
         <entry key="..\:/Users/juandaniel/AndroidStudioProjects/MiNegocio/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1195" />
       </map>
@@ -24,5 +26,12 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.1" />
+      </ProjectState>
+    </option>
   </component>
 </project>

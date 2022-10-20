@@ -5,12 +5,10 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,10 +23,9 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PopUpNuevoIngreso extends DialogFragment {
+public class PopUpNuevoGasto extends DialogFragment {
 
     private Button aceptarButton;
-    private Spinner tipoSpinner;
     private EditText fechaEditText, montoEditTex, descripcionEditText;
 
     @NonNull
@@ -36,18 +33,16 @@ public class PopUpNuevoIngreso extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.dialog_nuevo_ingreso, null);
+        View view = inflater.inflate(R.layout.dialog_nuevo_gasto, null);
 
         builder.setView(view);
 
         aceptarButton = view.findViewById(R.id.aceptarButton);
-        tipoSpinner = view.findViewById(R.id.tipoEditText);
         montoEditTex = view.findViewById(R.id.montoEditText);
         descripcionEditText = view.findViewById(R.id.descripcionEditText);
         fechaEditText = view.findViewById(R.id.fechaEditText);
 
         fecha();
-        datosSpinner();
         subirDB();
 
         Dialog dialog = builder.create();
@@ -64,11 +59,6 @@ public class PopUpNuevoIngreso extends DialogFragment {
         fechaEditText.setText(formattedDate);
     }
 
-    private void datosSpinner() {
-        String[] opciones = getResources().getStringArray(R.array.opciones);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.lista_opciones, opciones);
-        tipoSpinner.setAdapter(adapter);
-    }
 
     public void subirDB(){
         aceptarButton.setOnClickListener(view -> {
@@ -76,14 +66,13 @@ public class PopUpNuevoIngreso extends DialogFragment {
             FirebaseFirestore bd = FirebaseFirestore.getInstance();
 
             if(validar()){
-                String tipo = (String) tipoSpinner.getSelectedItem();
 
                 Map<String, String> datos = new HashMap<>();
                 datos.put("monto", montoEditTex.getText().toString());
                 datos.put("descripcion", descripcionEditText.getText().toString());
                 datos.put("fecha", fechaEditText.getText().toString());
-                datos.put("tipo", tipo);
-                datos.put("tipoNegocio", "ingreso");
+                datos.put("tipo", "Caja");
+                datos.put("tipoNegocio", "egreso");
 
                 bd.collection("Negocio").document().set(datos);
                 Toast.makeText(getActivity(), "Subido", Toast.LENGTH_SHORT).show();
@@ -97,17 +86,12 @@ public class PopUpNuevoIngreso extends DialogFragment {
     //Validamos los campos
     private boolean validar() {
 
-        String tipoSpinnerValidar = tipoSpinner.getSelectedItem().toString();
         String montoEditTexValidar = montoEditTex.getText().toString();
         String descripcionEditTextValidar = descripcionEditText.getText().toString();
 
-        if (tipoSpinnerValidar.isEmpty() || tipoSpinnerValidar.equals("Tipo")){
-            Toast.makeText(getActivity(), "Debe seleccionar un tipo.", Toast.LENGTH_SHORT).show();
-            return false;
-        }
         if (montoEditTexValidar.isEmpty()){
             montoEditTex.setError("Debe ingresar un monto.");
-           return false;
+            return false;
         }
         if (descripcionEditTextValidar.isEmpty()){
             descripcionEditText.setError("Debe ingresar una descripccion del producto.");
@@ -118,3 +102,4 @@ public class PopUpNuevoIngreso extends DialogFragment {
     }
 
 }
+
