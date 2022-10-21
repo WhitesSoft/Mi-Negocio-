@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 
 import com.darksoft.minegocio.R;
@@ -24,7 +25,9 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -59,37 +62,38 @@ public class MainActivity extends AppCompatActivity {
                         ArrayList<NegocioModel> lista = new ArrayList<>();
                         for (QueryDocumentSnapshot doc : value) {
                             NegocioModel model = doc.toObject(NegocioModel.class);
-//
-                            model.setDescripcion(model.getDescripcion());
-                            model.setMonto(model.getMonto());
-                            model.setFecha(model.getFecha());
-                            model.setTipo(model.getTipo());
 
-                            lista.add(model);
+                            //Fecha actual
+                            Calendar c = Calendar.getInstance();
+                            SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+                            String fechaactual = df.format(c.getTime());
+
+                            //Solo obtenemos los documentos de acuerdo a la fecha actual
+                            if(doc.getData().get("fecha").equals(fechaactual)){
+
+                                int totalCaja = 0;
+
+                                if(doc.getData().get("tipo").equals("Caja")){
+
+                                    if(doc.getData().get("tipoNegocio").equals("ingreso"))
+                                        Log.i("monto", model.getMonto());
+
+                                    if(doc.getData().get("tipoNegocio").equals("egreso"))
+                                        Log.i("monto", model.getMonto());
+                                }
+
+
+                                model.setDescripcion(model.getDescripcion());
+                                model.setMonto(model.getMonto());
+                                model.setFecha(model.getFecha());
+                                model.setTipo(model.getTipo());
+                                lista.add(model);
+                            }
+
                         }
-                        listaVentas.setAdapter(new AdapterNegocio(lista, R.layout.item_row, MainActivity.this));
+                        listaVentas.setAdapter(new AdapterNegocio(lista, MainActivity.this));
                     }
                 });
-
-//        db.collection("Ingresos")
-//                .get().addOnSuccessListener(queryDocumentSnapshots -> {
-//
-//                    ArrayList<NegocioModel> lista = new ArrayList<>();
-//
-//                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-//
-//                        NegocioModel model = document.toObject(NegocioModel.class);
-//
-//                        model.setDescripcion(model.getDescripcion());
-//                        model.setMonto(model.getMonto());
-//                        model.setFecha(model.getFecha());
-//                        model.setTipo(model.getTipo());
-//
-//                        lista.add(model);
-//
-//                    }
-//                    listaVentas.setAdapter(new AdapterNegocio(lista, R.layout.item_row, this));
-//                });
 
     }
 

@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.drawerlayout.widget.DrawerLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawerlayout"
-    android:background="@color/background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     tools:context=".activities.MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,75 +14,138 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@+id/contenedorTotalesDia"
+            app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
                 android:id="@+id/toolbar"
                 android:layout_width="56dp"
                 android:layout_height="?actionBarSize"
-                android:background="@drawable/round_toolbar"
-                android:orientation="horizontal"
-                android:gravity="center"
-                android:layout_marginTop="10dp"
                 android:layout_marginStart="10dp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
+                android:layout_marginTop="10dp"
+                android:background="@drawable/round_toolbar"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
                     android:id="@+id/menu"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:src="@drawable/ic_menu"
-                    android:contentDescription="@string/app_name" />
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/ic_menu" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:layout_marginTop="10dp"
+                android:gravity="center"
                 android:orientation="horizontal">
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btnNuevoIngreso"
                     android:layout_width="150dp"
                     android:layout_height="50dp"
+                    android:layout_marginEnd="3dp"
                     android:background="@drawable/button_verde"
                     android:text="@string/nuevo_ingreso"
-                    android:textColor="@color/white"
-                    android:layout_marginEnd="3dp" />
+                    android:textColor="@color/white" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btnNuevoGasto"
                     android:layout_width="150dp"
                     android:layout_height="50dp"
+                    android:layout_marginStart="3dp"
                     android:background="@drawable/button_rojo"
                     android:text="@string/nuevo_gasto"
-                    android:textColor="@color/white"
-                    android:layout_marginStart="3dp"/>
+                    android:textColor="@color/white" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
                 android:layout_marginTop="16dp"
-                android:background="@drawable/round_linear_layout"
-
-                app:layout_constraintTop_toBottomOf="@id/toolbar"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintVertical_bias="0">
+                android:background="@drawable/round_linear_layout">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/listaGlobalRecyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"/>
+                    android:layout_margin="8dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/contenedorTotalesDia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@color/background"
+            android:orientation="vertical"
+            android:padding="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/background_claro"
+                android:orientation="horizontal"
+                android:padding="8dp"
+                android:paddingStart="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Total Caja: "
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/totalCajaTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:text="4324"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@color/background_claro"
+                android:orientation="horizontal"
+                android:padding="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Total Tarjeta: "
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/totalTarjetaTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:text="4324"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
 
             </LinearLayout>
 
@@ -95,7 +157,7 @@
         android:id="@+id/navigationView"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:background="@color/background"
-        android:layout_gravity="start" />
+        android:layout_gravity="start"
+        android:background="@color/background" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

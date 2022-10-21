@@ -22,12 +22,10 @@ public class AdapterNegocio extends RecyclerView.Adapter<AdapterNegocio.NegocioV
     private NegocioModel negocioModel;
     private ArrayList<NegocioModel> listaNegocio;
     private Context context;
-    private final int resource;
 
 
-    public AdapterNegocio(ArrayList<NegocioModel> lista, int resource, Context context){
+    public AdapterNegocio(ArrayList<NegocioModel> lista, Context context){
         this.listaNegocio = lista;
-        this.resource = resource;
         this.context = context;
     }
 
