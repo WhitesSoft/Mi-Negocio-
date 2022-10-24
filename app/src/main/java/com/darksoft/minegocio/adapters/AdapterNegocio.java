@@ -5,9 +5,7 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,7 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.darksoft.minegocio.R;
 import com.darksoft.minegocio.models.NegocioModel;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class AdapterNegocio extends RecyclerView.Adapter<AdapterNegocio.NegocioViewHolder> {
 
@@ -41,8 +42,13 @@ public class AdapterNegocio extends RecyclerView.Adapter<AdapterNegocio.NegocioV
         //Obtenemos la posicion
         negocioModel = listaNegocio.get(position);
 
+        //Damos el formato de los numeros
+        double monto = Double.parseDouble(negocioModel.getMonto());
+        DecimalFormat myFormatter = new DecimalFormat("###,###,###.##", DecimalFormatSymbols.getInstance(Locale.GERMANY));
+        String montoFormato = myFormatter.format(monto);
+
         //cargamos los datos en la vista
-        holder.monto.setText(negocioModel.getMonto());
+        holder.monto.setText(montoFormato);
         holder.descripcion.setText(negocioModel.getDescripcion());
         holder.tipoVenta.setText(negocioModel.getTipo());
 

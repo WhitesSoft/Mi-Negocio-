@@ -8,10 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Gravity;
 import android.widget.Toast;
 
 import com.darksoft.minegocio.R;
@@ -20,29 +17,28 @@ import com.darksoft.minegocio.databinding.ActivityMainBinding;
 import com.darksoft.minegocio.dialogs.PopUpNuevoGasto;
 import com.darksoft.minegocio.dialogs.PopUpNuevoIngreso;
 import com.darksoft.minegocio.models.NegocioModel;
-import com.google.firebase.firestore.DocumentSnapshot;
+import com.darksoft.minegocio.utilities.FechaActual;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.text.SimpleDateFormat;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
     private static ActivityMainBinding binding;
+
+    private FechaActual fechaActual = new FechaActual();
+
     private RecyclerView listaVentas;
     private AlertDialog dialog;
     private AlertDialog.Builder builder;
-
-    //Fecha actual
-    Calendar c = Calendar.getInstance();
-    SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-    String fechaactual = df.format(c.getTime());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +59,9 @@ public class MainActivity extends AppCompatActivity {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        db.collection("Negocio")
+        //Solo obtenemos los documentos de acuerdo a la fecha actual
+        db.collection("Negocio").document(fechaActual.fechaActual())
+                .collection("ventas")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value,
@@ -75,48 +73,55 @@ public class MainActivity extends AppCompatActivity {
                         for (QueryDocumentSnapshot doc : value) {
                             NegocioModel model = doc.toObject(NegocioModel.class);
 
-                            //Solo obtenemos los documentos de acuerdo a la fecha actual
-                            if(doc.getData().get("fecha").equals(fechaactual)){
+                            //Caja
+                            if (doc.getData().get("tipo").equals("Caja")) {
 
-                                //Caja
-                                if(doc.getData().get("tipo").equals("Caja")){
+                                //Sumamos todos los ingresos
+                                if (doc.getData().get("tipoNegocio").equals("ingreso"))
+                                    totalCaja += Integer.parseInt(model.getMonto());
 
-                                    //Sumamos todos los ingresos
-                                    if(doc.getData().get("tipoNegocio").equals("ingreso"))
-                                        totalCaja += Integer.parseInt(model.getMonto());
-
-                                    //Sumamos todos los egresos
-                                    if(doc.getData().get("tipoNegocio").equals("egreso"))
-                                        totalInvertido += Integer.parseInt(model.getMonto());
-                                }
-
-                                //Tarjeta
-                                if(doc.getData().get("tipo").equals("Tarjeta")){
-
-                                    //Sumamos todos los ingresos
-                                    if(doc.getData().get("tipoNegocio").equals("ingreso"))
-                                        totalTarjeta += Integer.parseInt(model.getMonto());
-
-                                }
-
-
-                                model.setDescripcion(model.getDescripcion());
-                                model.setMonto(model.getMonto());
-                                model.setFecha(model.getFecha());
-                                model.setTipo(model.getTipo());
-                                lista.add(model);
+                                //Sumamos todos los egresos
+                                if (doc.getData().get("tipoNegocio").equals("egreso"))
+                                    totalInvertido += Integer.parseInt(model.getMonto());
                             }
+
+                            //Tarjeta
+                            if (doc.getData().get("tipo").equals("Tarjeta")) {
+
+                                //Sumamos todos los ingresos
+                                if (doc.getData().get("tipoNegocio").equals("ingreso"))
+                                    totalTarjeta += Integer.parseInt(model.getMonto());
+
+                            }
+
+                            model.setDescripcion(model.getDescripcion());
+                            model.setMonto(model.getMonto());
+                            model.setFecha(model.getFecha());
+                            model.setTipo(model.getTipo());
+                            lista.add(model);
 
                         }
 
-                        //pintamos los valores
-
                         totalDia = (totalCaja + totalTarjeta) - totalInvertido;
 
-                        binding.bottomSheet.totalCajaTextView.setText("$ " + totalCaja);
-                        binding.bottomSheet.totalTarjetaTextView.setText("$ " + totalTarjeta);
-                        binding.bottomSheet.totalInvertidoTextView.setText("$ " + totalInvertido);
-                        binding.bottomSheet.totalDiaTextView.setText("$ " + totalDia);
+                        //Damos formato a los numeros
+                        double tCaja = Double.parseDouble(String.valueOf(totalCaja));
+                        double tTarjeta = Double.parseDouble(String.valueOf(totalTarjeta));
+                        double tTotalInvertido = Double.parseDouble(String.valueOf(totalInvertido));
+                        double tTotalDia = Double.parseDouble(String.valueOf(totalDia));
+
+                        DecimalFormat myFormatter = new DecimalFormat("###,###,###.##", DecimalFormatSymbols.getInstance(Locale.GERMANY));
+
+                        String montoCajaFormato = myFormatter.format(tCaja);
+                        String montoTarjetaFormato = myFormatter.format(tTarjeta);
+                        String montoInvertidoFormato = myFormatter.format(tTotalInvertido);
+                        String montoTotalDia = myFormatter.format(tTotalDia);
+
+                        //pintamos los valores
+                        binding.bottomSheet.totalCajaTextView.setText("$ " + montoCajaFormato);
+                        binding.bottomSheet.totalTarjetaTextView.setText("$ " + montoTarjetaFormato);
+                        binding.bottomSheet.totalInvertidoTextView.setText("$ " + montoInvertidoFormato);
+                        binding.bottomSheet.totalDiaTextView.setText("$ " + montoTotalDia);
 
                         final int dia = totalDia;
 
@@ -124,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
                         binding.bottomSheet.cerrarDiaButton.setOnClickListener(v -> {
 
                             HashMap<String, String> datosDia = new HashMap<>();
-                            datosDia.put("fecha", fechaactual);
+                            datosDia.put("fecha", fechaActual.fechaActual());
                             datosDia.put("total", String.valueOf(dia));
 
                             cargarDialog(datosDia);
@@ -146,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
         builder.setMessage("¿Deseas terminar el dia?");
 
         builder.setPositiveButton("Sí", (dialogInterface, i) -> {
-            db.collection("Ganancias").document(fechaactual).set(datosDia);
+            db.collection("Ganancias").document(fechaActual.fechaActual()).set(datosDia);
             Toast.makeText(MainActivity.this, "Día Cerrado", Toast.LENGTH_SHORT).show();
             finish();
         });
@@ -159,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void botones(){
+    private void botones() {
         binding.toolbar.setOnClickListener(v -> {
             binding.drawerlayout.openDrawer(GravityCompat.START);
         });
@@ -170,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         });
 
-        binding.btnNuevoGasto.setOnClickListener( v -> {
+        binding.btnNuevoGasto.setOnClickListener(v -> {
             DialogFragment pop = new PopUpNuevoGasto();
             pop.show(getSupportFragmentManager(), "Nuevo Gasto");
             return;

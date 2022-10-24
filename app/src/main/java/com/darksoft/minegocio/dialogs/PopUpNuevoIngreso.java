@@ -18,6 +18,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.darksoft.minegocio.R;
+import com.darksoft.minegocio.utilities.FechaActual;
+import com.darksoft.minegocio.utilities.NumberTextWatcher;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
@@ -26,6 +28,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PopUpNuevoIngreso extends DialogFragment {
+
+    private FechaActual fechaActual = new FechaActual();
 
     private Button aceptarButton;
     private Spinner tipoSpinner;
@@ -46,6 +50,9 @@ public class PopUpNuevoIngreso extends DialogFragment {
         descripcionEditText = view.findViewById(R.id.descripcionEditText);
         fechaEditText = view.findViewById(R.id.fechaEditText);
 
+        //Separador de miles
+        montoEditTex.addTextChangedListener(new NumberTextWatcher(montoEditTex));
+
         fecha();
         datosSpinner();
         subirDB();
@@ -58,10 +65,7 @@ public class PopUpNuevoIngreso extends DialogFragment {
     }
 
     private void fecha() {
-        Calendar c = Calendar.getInstance();
-        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-        String formattedDate = df.format(c.getTime());
-        fechaEditText.setText(formattedDate);
+        fechaEditText.setText(fechaActual.fechaActual());
     }
 
     private void datosSpinner() {
@@ -75,17 +79,28 @@ public class PopUpNuevoIngreso extends DialogFragment {
 
             FirebaseFirestore bd = FirebaseFirestore.getInstance();
 
+            String quitar = montoEditTex.getText().toString();
+            String monto = "";
+
+            //Obtenemos solo los numeros
+            for (int i = 0; i < quitar.length(); i++){
+                if(Character.isDigit(quitar.charAt(i)))
+                    monto += quitar.charAt(i);
+            }
+
+
             if(validar()){
                 String tipo = (String) tipoSpinner.getSelectedItem();
 
                 Map<String, String> datos = new HashMap<>();
-                datos.put("monto", montoEditTex.getText().toString());
+                datos.put("monto", monto);
                 datos.put("descripcion", descripcionEditText.getText().toString());
                 datos.put("fecha", fechaEditText.getText().toString());
                 datos.put("tipo", tipo);
                 datos.put("tipoNegocio", "ingreso");
 
-                bd.collection("Negocio").document().set(datos);
+                bd.collection("Negocio").document(fechaActual.fechaActual())
+                        .collection("ventas").document().set(datos);
                 Toast.makeText(getActivity(), "Subido", Toast.LENGTH_SHORT).show();
                 dismiss();
             }
