@@ -4,22 +4,19 @@
     tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
+
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_home"
             android:title="Inicio"
-            android:iconTint="@color/white"
-
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_calendar"
             android:icon="@drawable/ic_calendar"
             android:title="Calendario"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_money"
-            android:title="Ganancias del mes"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+
     </group>
+
 </menu>
