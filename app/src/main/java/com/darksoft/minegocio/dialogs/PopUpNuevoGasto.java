@@ -55,6 +55,7 @@ public class PopUpNuevoGasto extends DialogFragment {
         if (dialog.getWindow() != null){
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         }
+
         return dialog;
     }
 
