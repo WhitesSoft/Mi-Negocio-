@@ -6,7 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".activities.MainActivity">
+    android:fitsSystemWindows="true"
+    tools:context=".activities.MainActivity"
+    tools:openDrawer="start">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -14,9 +16,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="match_parent"
             android:orientation="vertical"
-            app:layout_constraintBottom_toTopOf="@+id/contenedorTotalesDia"
             app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
@@ -40,116 +41,21 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnNuevoIngreso"
-                    android:layout_width="150dp"
-                    android:layout_height="50dp"
-                    android:layout_marginEnd="3dp"
-                    android:background="@drawable/button_verde"
-                    android:text="@string/nuevo_ingreso"
-                    android:textColor="@color/white" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnNuevoGasto"
-                    android:layout_width="150dp"
-                    android:layout_height="50dp"
-                    android:layout_marginStart="3dp"
-                    android:background="@drawable/button_rojo"
-                    android:text="@string/nuevo_gasto"
-                    android:textColor="@color/white" />
-
-            </LinearLayout>
-
-            <LinearLayout
+            <fragment
+                android:id="@+id/main"
+                android:name="androidx.navigation.fragment.NavHostFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/round_linear_layout">
+                app:defaultNavHost="true"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:navGraph="@navigation/mobile_navigation" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/listaGlobalRecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp" />
 
-            </LinearLayout>
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/contenedorTotalesDia"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@color/background"
-            android:orientation="vertical"
-            android:padding="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/background_claro"
-                android:orientation="horizontal"
-                android:padding="8dp"
-                android:paddingStart="8dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Total Caja: "
-                    android:textColor="@color/white"
-                    android:textSize="20sp" />
-
-                <TextView
-                    android:id="@+id/totalCajaTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="end"
-                    android:text="4324"
-                    android:textColor="@color/white"
-                    android:textSize="20sp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:background="@color/background_claro"
-                android:orientation="horizontal"
-                android:padding="8dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Total Tarjeta: "
-                    android:textColor="@color/white"
-                    android:textSize="20sp" />
-
-                <TextView
-                    android:id="@+id/totalTarjetaTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="end"
-                    android:text="4324"
-                    android:textColor="@color/white"
-                    android:textSize="20sp" />
-
-            </LinearLayout>
-
-        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -158,6 +64,10 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@color/background" />
+        android:background="@color/background"
+        app:headerLayout="@layout/nav_header_main"
+        app:itemIconTint="@color/white"
+        app:itemTextColor="@color/white"
+        app:menu="@menu/activity_main_drawer" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

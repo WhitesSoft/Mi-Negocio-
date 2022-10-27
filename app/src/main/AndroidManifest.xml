@@ -13,19 +13,20 @@
         android:theme="@style/Theme.MiNegocio"
         tools:targetApi="31">
         <activity
+            android:name=".activities.DiaVentaActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.SplashScreen"
             android:exported="true">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".activities.MainActivity"
-            android:exported="true"/>
+            android:exported="true" />
 
         <meta-data
             android:name="preloaded_fonts"
