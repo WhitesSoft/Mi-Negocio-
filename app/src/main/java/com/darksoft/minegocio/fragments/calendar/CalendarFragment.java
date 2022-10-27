@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.darksoft.minegocio.activities.DiaVentaActivity;
 import com.darksoft.minegocio.adapters.CalendarAdapter;
 import com.darksoft.minegocio.databinding.FragmentCalendarBinding;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -40,6 +42,7 @@ public class CalendarFragment extends Fragment implements CalendarAdapter.OnItem
 
     private FragmentCalendarBinding binding;
 
+    private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private TextView monthYearText;
     private RecyclerView calendarRecyclerView;
     private LocalDate selectedDate;
@@ -102,30 +105,28 @@ public class CalendarFragment extends Fragment implements CalendarAdapter.OnItem
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         //Mostramos el total de ganancia del mes
-        db.collection("Ganancias").addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+        db.collection(user.getEmail()).document("Ganancias")
+                .collection("fechas").addSnapshotListener((value, error) -> {
 
-                int total = 0;
+                    int total = 0;
 
-                //Sumamos el total ganado de cada dia
-                for (QueryDocumentSnapshot doc : value) {
-                    if (fechas.contains(doc.getString("fecha"))) {
-                        total += Integer.parseInt(Objects.requireNonNull(doc.getString("total")));
+                    //Sumamos el total ganado de cada dia
+                    for (QueryDocumentSnapshot doc : value) {
+                        if (fechas.contains(doc.getString("fecha"))) {
+                            total += Integer.parseInt(Objects.requireNonNull(doc.getString("total")));
+                        }
                     }
-                }
 
-                //Pasamos al formato de venta
-                DecimalFormat myFormatter =
-                        new DecimalFormat("###,###,###.##", DecimalFormatSymbols.getInstance(Locale.GERMANY));
+                    //Pasamos al formato de venta
+                    DecimalFormat myFormatter =
+                            new DecimalFormat("###,###,###.##", DecimalFormatSymbols.getInstance(Locale.GERMANY));
 
-                String montoTotalFormato = myFormatter.format(total);
+                    String montoTotalFormato = myFormatter.format(total);
 
-                //Pintamos el valor
-                binding.total.setText("$ " + montoTotalFormato);
+                    //Pintamos el valor
+                    binding.total.setText("$ " + montoTotalFormato);
 
-            }
-        });
+                });
 
     }
 

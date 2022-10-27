@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "911958224388-ht8m0d7k2sf9444im091rpbfqpniip03.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.darksoft.minegocio",
+            "certificate_hash": "546279ff5f87e4424d1e8fd369a549f1d9c0ece7"
+          }
+        },
+        {
           "client_id": "911958224388-j4mf8hmi75rel6vc80g93kjcrsgclkma.apps.googleusercontent.com",
           "client_type": 3
         }

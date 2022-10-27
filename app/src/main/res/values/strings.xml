@@ -2,6 +2,8 @@
     <string name="app_name">Mi Negocio</string>
     <string name="nuevo_ingreso">nuevo ingreso</string>
     <string name="nuevo_gasto">nuevo gasto</string>
+    <string name="noFountInternet">No hay conexión a internet. Conéctate a internet e inténtalo de nuevo.</string>
+    <string name="web_client_id">911958224388-j4mf8hmi75rel6vc80g93kjcrsgclkma.apps.googleusercontent.com</string>
 
 
     <string name="tipo_de_ingreso">Tipo</string>
@@ -23,4 +25,6 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+
+
 </resources>
