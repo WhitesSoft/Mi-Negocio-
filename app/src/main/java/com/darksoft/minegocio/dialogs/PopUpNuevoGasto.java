@@ -16,6 +16,8 @@ import androidx.fragment.app.DialogFragment;
 import com.darksoft.minegocio.R;
 import com.darksoft.minegocio.utilities.FechaActual;
 import com.darksoft.minegocio.utilities.NumberTextWatcher;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -25,6 +27,7 @@ public class PopUpNuevoGasto extends DialogFragment {
 
     private FechaActual fechaActual = new FechaActual();
 
+    private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private Button aceptarButton;
     private EditText fechaEditText, montoEditTex, descripcionEditText;
 
@@ -52,6 +55,7 @@ public class PopUpNuevoGasto extends DialogFragment {
         if (dialog.getWindow() != null){
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         }
+
         return dialog;
     }
 
@@ -83,11 +87,11 @@ public class PopUpNuevoGasto extends DialogFragment {
                 datos.put("tipo", "Caja");
                 datos.put("tipoNegocio", "egreso");
 
-                //Collection(Negocio) -> document(fechaActual) -> Collection(VentasDia)
-                bd.collection("Negocio").document(fechaActual.fechaActual())
+                bd.collection(user.getEmail()).document("Negocio")
+                        .collection("fechas").document(fechaActual.fechaActual())
                         .collection("ventas").document().set(datos);
-                //bd.collection("Negocio").document().set(datos);
-                Toast.makeText(getActivity(), "Subido", Toast.LENGTH_SHORT).show();
+
+                Toast.makeText(getActivity(), "Gasto agregado", Toast.LENGTH_SHORT).show();
                 dismiss();
             }
 

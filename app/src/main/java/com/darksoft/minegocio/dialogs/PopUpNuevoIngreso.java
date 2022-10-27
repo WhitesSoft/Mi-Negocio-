@@ -20,6 +20,8 @@ import androidx.fragment.app.DialogFragment;
 import com.darksoft.minegocio.R;
 import com.darksoft.minegocio.utilities.FechaActual;
 import com.darksoft.minegocio.utilities.NumberTextWatcher;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
@@ -31,6 +33,7 @@ public class PopUpNuevoIngreso extends DialogFragment {
 
     private FechaActual fechaActual = new FechaActual();
 
+    private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private Button aceptarButton;
     private Spinner tipoSpinner;
     private EditText fechaEditText, montoEditTex, descripcionEditText;
@@ -99,9 +102,11 @@ public class PopUpNuevoIngreso extends DialogFragment {
                 datos.put("tipo", tipo);
                 datos.put("tipoNegocio", "ingreso");
 
-                bd.collection("Negocio").document(fechaActual.fechaActual())
+                bd.collection(user.getEmail()).document("Negocio")
+                        .collection("fechas").document(fechaActual.fechaActual())
                         .collection("ventas").document().set(datos);
-                Toast.makeText(getActivity(), "Subido", Toast.LENGTH_SHORT).show();
+
+                Toast.makeText(getActivity(), "Ingreso agregado", Toast.LENGTH_SHORT).show();
                 dismiss();
             }
 
