@@ -9,11 +9,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.darksoft.minegocio.adapters.AdapterNegocio;
+import com.darksoft.minegocio.adapters.CalendarAdapter;
 import com.darksoft.minegocio.databinding.FragmentCalendarBinding;
-import com.darksoft.minegocio.models.NegocioModel;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -22,106 +22,149 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
+import java.util.Objects;
 
 public class CalendarFragment extends Fragment {
 
     private FragmentCalendarBinding binding;
+
+    private TextView monthYearText;
+    private RecyclerView calendarRecyclerView;
+    private LocalDate selectedDate;
+    private LocalDate ultimoDiaMes;
+    private ArrayList<String> diasDelMes;
+    private ArrayList<String> fechas;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         binding = FragmentCalendarBinding.inflate(inflater, container, false);
 
+        calendarRecyclerView = binding.calendarRecyclerView;
+        monthYearText = binding.monthYearTV;
+
+        selectedDate = LocalDate.now(); //Fecha Actual (2022-10-26)
+
+        cargarMes();
         cargarGanancias();
+        botones();
 
         return binding.getRoot();
+    }
+
+
+    private void cargarMes() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+
+        monthYearText.setText(monthYearFromDate(selectedDate));
+        diasDelMes = daysInMonthArray(selectedDate);
+        ultimoDiaMes = selectedDate.with(TemporalAdjusters.lastDayOfMonth());
+
+        CalendarAdapter calendarAdapter = new CalendarAdapter(diasDelMes, getActivity());
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getActivity(), 7);
+        calendarRecyclerView.setLayoutManager(layoutManager);
+        calendarRecyclerView.setAdapter(calendarAdapter);
+        calendarRecyclerView.setHasFixedSize(true);
+
+        //Obtenemos ultimo del mes y lo cambiamos de formato -> (31-10-2022)
+        ZoneId defaultZoneId = ZoneId.systemDefault();
+        Date date = Date.from(ultimoDiaMes.atStartOfDay(defaultZoneId).toInstant());
+
+        String fechaUltimoDiaMes = sdf.format(date);
+
+        //Add todas las fechas del mes
+        fechas = new ArrayList<>();
+        for (int i = 1; i <= Integer.parseInt(fechaUltimoDiaMes.substring(0, 2)); i++) {
+            String dia = String.valueOf(i);
+            if (dia.length() == 1)
+                fechas.add("0" + (dia + fechaUltimoDiaMes.substring(2)));
+            else
+                fechas.add(dia + fechaUltimoDiaMes.substring(2));
+        }
+
+        cargarGanancias();
+
     }
 
     private void cargarGanancias(){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+        //Mostramos el total de ganancia del mes
+        db.collection("Ganancias").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
 
-        try {
-            //No da
-            String fechaInicio = "01-11-2022";
-            String fechaFinal = "30-11-2022";
+                int total = 0;
 
-            SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
-            Date fechaInicioF = formato.parse(fechaInicio);
-            Date fechaFinalF = formato.parse(fechaFinal);
+                //Sumamos el total ganado de cada dia
+                for (QueryDocumentSnapshot doc : value) {
+                    if (fechas.contains(doc.getString("fecha"))) {
+                        total += Integer.parseInt(Objects.requireNonNull(doc.getString("total")));
+                    }
+                }
 
-            System.out.println(fechaInicioF);
-            System.out.println(fechaFinalF);
+                //Pasamos al formato de venta
+                DecimalFormat myFormatter =
+                        new DecimalFormat("###,###,###.##", DecimalFormatSymbols.getInstance(Locale.GERMANY));
 
-            //Filtramos las ganancias de acuerdo al mes
-            //whereGreaterThanOrEqualTo   >=
-            //whereLessThanOrEqualTo   <=
-            db.collection("Ganancias").whereGreaterThanOrEqualTo("fecha", fechaInicio)
-                    .whereLessThanOrEqualTo("fecha", fechaFinal).addSnapshotListener(new EventListener<QuerySnapshot>() {
-                        @Override
-                        public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                String montoTotalFormato = myFormatter.format(total);
 
-                            int total = 0;
+                //Pintamos el valor
+                binding.total.setText("$ " + montoTotalFormato);
 
-                            //Sumamos el total ganado de cada dia
-                            for (QueryDocumentSnapshot doc : value) {
-                                System.out.println(doc.getData());
-                                total += Integer.parseInt(doc.getString("total"));
-                            }
-
-                            //Pasamos al formato de venta
-                            DecimalFormat myFormatter =
-                                    new DecimalFormat("###,###,###.##", DecimalFormatSymbols.getInstance(Locale.GERMANY));
-
-                            String montoTotalFormato = myFormatter.format(total);
-
-                            //Pintamos el valor
-                            binding.total.setText("$ " + montoTotalFormato);
-
-                        }
-                    });
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-
-
-
+            }
+        });
 
     }
 
-    private void validarFechas(){
+    //Obtener dias del mes actual
+    private ArrayList<String> daysInMonthArray(LocalDate date) {
+        ArrayList<String> daysInMonthArray = new ArrayList<>();
+        YearMonth yearMonth = YearMonth.from(date);
 
-        try {
-            String fecha = "14-10-2022";
-            String fechaInicio = "01-10-2022";
-            String fechaFinal = "31-10-2022";
+        int daysInMonth = yearMonth.lengthOfMonth();
 
-            SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
+        LocalDate firstOfMonth = selectedDate.withDayOfMonth(1);
+        int dayOfWeek = firstOfMonth.getDayOfWeek().getValue();
 
-            Date fechaFormato = formato.parse(fecha);
-            Date fechaInicioF = formato.parse(fechaInicio);
-            Date fechaFinalF = formato.parse(fechaFinal);
-
-            if(fechaFormato.equals(fechaInicioF) || fechaFormato.equals(fechaFinalF)){
-                System.out.println("La fecha [" + fecha +"] esta dentro del rango: " + " [" + fechaInicio + " - " + fechaFinal + "]");
-            }else if(fechaFormato.after(fechaInicioF) && fechaFormato.before(fechaFinalF)) {
-                System.out.println("La fecha [" + fecha +"] esta dentro del rango: " + " [" + fechaInicio + " - " + fechaFinal + "]");
-            }else {
-                System.out.println("La fecha [" + fecha +"] NO esta dentro del rango: " + " [" + fechaInicio + " - " + fechaFinal + "]");
+        for (int i = 1; i <= 42; i++) {
+            if (i <= dayOfWeek || i > daysInMonth + dayOfWeek) {
+                daysInMonthArray.add("");
+            } else {
+                daysInMonthArray.add(String.valueOf(i - dayOfWeek));
             }
-
-        } catch (ParseException e) {
-            e.printStackTrace();
         }
+        return daysInMonthArray;
+    }
 
+    //Formatear fecha (2022-10-26) -> (octubre 2022)
+    private String monthYearFromDate(LocalDate date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy");
+        return date.format(formatter);
+    }
+
+    private void botones() {
+        binding.mesAnteriorButtom.setOnClickListener(v -> {
+            selectedDate = selectedDate.minusMonths(1);
+            diasDelMes = daysInMonthArray(selectedDate);
+            cargarMes();
+        });
+
+        binding.mesSiguienteButtom.setOnClickListener(v -> {
+            selectedDate = selectedDate.plusMonths(1);
+            diasDelMes = daysInMonthArray(selectedDate);
+            cargarMes();
+        });
     }
 
     @Override

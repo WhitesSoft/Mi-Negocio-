@@ -13,6 +13,9 @@
         android:theme="@style/Theme.MiNegocio"
         tools:targetApi="31">
         <activity
+            android:name=".activities.DiaVentaActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.SplashScreen"
             android:exported="true">
             <intent-filter>
