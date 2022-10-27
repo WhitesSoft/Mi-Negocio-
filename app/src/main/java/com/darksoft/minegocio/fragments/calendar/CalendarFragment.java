@@ -1,10 +1,12 @@
 package com.darksoft.minegocio.fragments.calendar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.darksoft.minegocio.activities.DiaVentaActivity;
 import com.darksoft.minegocio.adapters.CalendarAdapter;
 import com.darksoft.minegocio.databinding.FragmentCalendarBinding;
 import com.google.firebase.firestore.EventListener;
@@ -33,7 +36,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
-public class CalendarFragment extends Fragment {
+public class CalendarFragment extends Fragment implements CalendarAdapter.OnItemListener{
 
     private FragmentCalendarBinding binding;
 
@@ -70,7 +73,7 @@ public class CalendarFragment extends Fragment {
         diasDelMes = daysInMonthArray(selectedDate);
         ultimoDiaMes = selectedDate.with(TemporalAdjusters.lastDayOfMonth());
 
-        CalendarAdapter calendarAdapter = new CalendarAdapter(diasDelMes, getActivity());
+        CalendarAdapter calendarAdapter = new CalendarAdapter(diasDelMes,this);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getActivity(), 7);
         calendarRecyclerView.setLayoutManager(layoutManager);
         calendarRecyclerView.setAdapter(calendarAdapter);
@@ -79,7 +82,6 @@ public class CalendarFragment extends Fragment {
         //Obtenemos ultimo del mes y lo cambiamos de formato -> (31-10-2022)
         ZoneId defaultZoneId = ZoneId.systemDefault();
         Date date = Date.from(ultimoDiaMes.atStartOfDay(defaultZoneId).toInstant());
-
         String fechaUltimoDiaMes = sdf.format(date);
 
         //Add todas las fechas del mes
@@ -171,5 +173,27 @@ public class CalendarFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    @Override
+    public void onItemClick(int position, String dayText) {
+        if(!dayText.equals("")) {
+
+            //Obtenemos el mes y lo cambiamos de formato -> (31-10-2022)
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            ZoneId defaultZoneId = ZoneId.systemDefault();
+            Date date = Date.from(selectedDate.atStartOfDay(defaultZoneId).toInstant());
+            String fechaMes = sdf.format(date);
+
+            if (dayText.length() == 1)
+                dayText = "0" + dayText;
+
+            String fechaSeleccionada = dayText + fechaMes.substring(2);
+
+            Intent intent = new Intent(getActivity(), DiaVentaActivity.class);
+            intent.putExtra("fecha", fechaSeleccionada);
+            startActivity(intent);
+
+        }
     }
 }

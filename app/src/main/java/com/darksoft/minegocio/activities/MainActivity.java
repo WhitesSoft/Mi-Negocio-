@@ -54,11 +54,6 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        //Setup RecyclerView
-//        listaVentas = findViewById(R.id.listaGlobalRecyclerView);
-//        listaVentas.setLayoutManager(new LinearLayoutManager(this));
-//        listaVentas.setHasFixedSize(true);
-
         //Setup NavigationDrawer
         DrawerLayout drawer = binding.drawerlayout;
         NavigationView navigationView = binding.navigationView;
@@ -69,135 +64,14 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.main);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        //cargarNegocio();
         botones();
     }
 
-//    private void cargarNegocio() {
-//
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//
-//        //Solo obtenemos los documentos de acuerdo a la fecha actual
-//        db.collection("Negocio").document(fechaActual.fechaActual())
-//                .collection("ventas")
-//                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onEvent(@Nullable QuerySnapshot value,
-//                                        @Nullable FirebaseFirestoreException e) {
-//
-//                        ArrayList<NegocioModel> lista = new ArrayList<>();
-//                        int totalCaja = 0, totalTarjeta = 0, totalInvertido = 0, totalDia = 0;
-//
-//                        for (QueryDocumentSnapshot doc : value) {
-//                            NegocioModel model = doc.toObject(NegocioModel.class);
-//
-//                            //Caja
-//                            if (doc.getData().get("tipo").equals("Caja")) {
-//
-//                                //Sumamos todos los ingresos
-//                                if (doc.getData().get("tipoNegocio").equals("ingreso"))
-//                                    totalCaja += Integer.parseInt(model.getMonto());
-//
-//                                //Sumamos todos los egresos
-//                                if (doc.getData().get("tipoNegocio").equals("egreso"))
-//                                    totalInvertido += Integer.parseInt(model.getMonto());
-//                            }
-//
-//                            //Tarjeta
-//                            if (doc.getData().get("tipo").equals("Tarjeta")) {
-//
-//                                //Sumamos todos los ingresos
-//                                if (doc.getData().get("tipoNegocio").equals("ingreso"))
-//                                    totalTarjeta += Integer.parseInt(model.getMonto());
-//
-//                            }
-//
-//                            model.setDescripcion(model.getDescripcion());
-//                            model.setMonto(model.getMonto());
-//                            model.setFecha(model.getFecha());
-//                            model.setTipo(model.getTipo());
-//                            lista.add(model);
-//
-//                        }
-//
-//                        totalDia = (totalCaja + totalTarjeta) - totalInvertido;
-//
-//                        //Damos formato a los numeros
-//                        double tCaja = Double.parseDouble(String.valueOf(totalCaja));
-//                        double tTarjeta = Double.parseDouble(String.valueOf(totalTarjeta));
-//                        double tTotalInvertido = Double.parseDouble(String.valueOf(totalInvertido));
-//                        double tTotalDia = Double.parseDouble(String.valueOf(totalDia));
-//
-//                        DecimalFormat myFormatter = new DecimalFormat("###,###,###.##", DecimalFormatSymbols.getInstance(Locale.GERMANY));
-//
-//                        String montoCajaFormato = myFormatter.format(tCaja);
-//                        String montoTarjetaFormato = myFormatter.format(tTarjeta);
-//                        String montoInvertidoFormato = myFormatter.format(tTotalInvertido);
-//                        String montoTotalDia = myFormatter.format(tTotalDia);
-//
-//                        //pintamos los valores
-//                        binding.bottomSheet.totalCajaTextView.setText("$ " + montoCajaFormato);
-//                        binding.bottomSheet.totalTarjetaTextView.setText("$ " + montoTarjetaFormato);
-//                        binding.bottomSheet.totalInvertidoTextView.setText("$ " + montoInvertidoFormato);
-//                        binding.bottomSheet.totalDiaTextView.setText("$ " + montoTotalDia);
-//
-//                        final int dia = totalDia;
-//
-//                        //Cerrar dia
-//                        binding.bottomSheet.cerrarDiaButton.setOnClickListener(v -> {
-//
-//                            HashMap<String, String> datosDia = new HashMap<>();
-//                            datosDia.put("fecha", fechaActual.fechaActual());
-//                            datosDia.put("total", String.valueOf(dia));
-//
-//                            cargarDialog(datosDia);
-//
-//                        });
-//
-//                        //Llenamos el ReciclerView
-//                        listaVentas.setAdapter(new AdapterNegocio(lista, MainActivity.this));
-//                    }
-//                });
-//
-//    }
-
-//    private void cargarDialog(HashMap<String, String> datosDia) {
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//
-//        //Setup Dialog
-//        builder = new AlertDialog.Builder(MainActivity.this);
-//        builder.setMessage("¿Deseas terminar el dia?");
-//
-//        builder.setPositiveButton("Sí", (dialogInterface, i) -> {
-//            db.collection("Ganancias").document(fechaActual.fechaActual()).set(datosDia);
-//            Toast.makeText(MainActivity.this, "Día Cerrado", Toast.LENGTH_SHORT).show();
-//            finish();
-//        });
-//
-//        builder.setNegativeButton("Cancelar", (dialogInterface, i) -> {
-//
-//        });
-//
-//        dialog = builder.create();
-//        dialog.show();
-//    }
 
     private void botones() {
         binding.toolbar.setOnClickListener(v -> {
             binding.drawerlayout.openDrawer(GravityCompat.START);
         });
-
-//        binding.btnNuevoIngreso.setOnClickListener(v -> {
-//            DialogFragment pop = new PopUpNuevoIngreso();
-//            pop.show(getSupportFragmentManager(), "Nuevo Ingreso");
-//            return;
-//        });
-//
-//        binding.btnNuevoGasto.setOnClickListener(v -> {
-//            DialogFragment pop = new PopUpNuevoGasto();
-//            pop.show(getSupportFragmentManager(), "Nuevo Gasto");
-//            return;
-//        });
     }
 
     @Override
