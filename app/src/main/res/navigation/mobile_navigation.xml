@@ -16,5 +16,10 @@
         android:name="com.darksoft.minegocio.fragments.calendar.CalendarFragment"
         android:label="@string/menu_gallery"
         tools:layout="@layout/fragment_calendar" />
+    <fragment
+        android:id="@+id/nav_perfil"
+        android:name="com.darksoft.minegocio.fragments.perfil.PerfilFragment"
+        android:label="fragment_perfil"
+        tools:layout="@layout/fragment_perfil" />
 
 </navigation>
