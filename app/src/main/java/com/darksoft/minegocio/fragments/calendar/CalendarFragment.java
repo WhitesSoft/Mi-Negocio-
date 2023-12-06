@@ -44,6 +44,7 @@ public class CalendarFragment extends Fragment implements CalendarAdapter.OnItem
 
     private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private TextView monthYearText;
+    private TextView totalMes;
     private RecyclerView calendarRecyclerView;
     private LocalDate selectedDate;
     private LocalDate ultimoDiaMes;
@@ -58,6 +59,7 @@ public class CalendarFragment extends Fragment implements CalendarAdapter.OnItem
 
         calendarRecyclerView = binding.calendarRecyclerView;
         monthYearText = binding.monthYearTV;
+        totalMes = binding.totalMes;
 
         selectedDate = LocalDate.now(); //Fecha Actual (2022-10-26)
 
@@ -124,7 +126,7 @@ public class CalendarFragment extends Fragment implements CalendarAdapter.OnItem
                     String montoTotalFormato = myFormatter.format(total);
 
                     //Pintamos el valor
-                    binding.total.setText("$ " + montoTotalFormato);
+                    totalMes.setText("$ " + montoTotalFormato);
 
                 });
 
