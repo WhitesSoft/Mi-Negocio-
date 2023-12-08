@@ -5,8 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.darksoft.minegocio.R;
 import com.darksoft.minegocio.adapters.AdapterNegocio;
@@ -35,8 +37,10 @@ public class DiaVentaActivity extends AppCompatActivity {
     private ActivityDiaVentaBinding binding;
 
     private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private RecyclerView listaVentas;
     private String fecha = "";
+    private LinearLayout linearLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,24 +49,33 @@ public class DiaVentaActivity extends AppCompatActivity {
         binding = ActivityDiaVentaBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        linearLayout = binding.sinDatos;
+
         //Setup RecyclerView
         listaVentas = binding.fechaRecyclerView;
         listaVentas.setLayoutManager(new LinearLayoutManager(this));
         listaVentas.setHasFixedSize(true);
 
         Bundle extras = getIntent().getExtras();
-        if(extras != null){
+        if (extras != null) {
             fecha = extras.getString("fecha");
         }
 
         binding.fecha.setText(fecha);
-        cargarNegocio();
 
+        if (user != null) {
+            cargarNegocio();
+        }
+
+
+        binding.btnAgregar.setOnClickListener(v -> {
+            Intent intent = new Intent(this, DiaVentaAtrasado.class);
+            intent.putExtra("fecha", fecha);
+            startActivity(intent);
+        });
     }
 
     private void cargarNegocio() {
-
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         //Solo obtenemos los documentos de acuerdo a la fecha actual
         db.collection(user.getEmail()).document("Negocio").collection("fechas")
@@ -104,6 +117,16 @@ public class DiaVentaActivity extends AppCompatActivity {
 
                     }
 
+                    // Pintar la UI
+                    if (value.isEmpty()) {
+                        linearLayout.setVisibility(View.VISIBLE);
+                        listaVentas.setAdapter(null);
+                    } else {
+                        linearLayout.setVisibility(View.INVISIBLE);
+                        listaVentas.setAdapter(new AdapterNegocio(lista, DiaVentaActivity.this));
+                    }
+
+                    // Total de ventas
                     totalDia = (totalCaja + totalTarjeta) - totalInvertido;
 
                     //Damos formato a los numeros
@@ -116,19 +139,6 @@ public class DiaVentaActivity extends AppCompatActivity {
                     //pintamos los valores
                     binding.totalDiaTextView.setText("$ " + montoTotalDia);
 
-                    if (lista.size() == 0){
-                        binding.sinDatos.setVisibility(View.VISIBLE);
-                        binding.content.setVisibility(View.INVISIBLE);
-                    }else {
-                        binding.sinDatos.setVisibility(View.INVISIBLE);
-                        binding.content.setVisibility(View.VISIBLE);
-                    }
-
-//                        else
-//                            binding.sinDatos.setVisibility(View.INVISIBLE);
-
-                    //Llenamos el ReciclerView
-                    listaVentas.setAdapter(new AdapterNegocio(lista, DiaVentaActivity.this));
                 });
 
     }

@@ -1,20 +1,24 @@
 package com.darksoft.minegocio.fragments.home;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.darksoft.minegocio.R;
 import com.darksoft.minegocio.adapters.AdapterNegocio;
 import com.darksoft.minegocio.databinding.FragmentHomeBinding;
 import com.darksoft.minegocio.dialogs.PopUpNuevoGasto;
@@ -41,6 +45,7 @@ public class HomeFragment extends Fragment {
 
     private final FechaActual fechaActual = new FechaActual();
     private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private RecyclerView listaVentas;
     private AlertDialog dialog;
     private AlertDialog.Builder builder;
@@ -55,7 +60,9 @@ public class HomeFragment extends Fragment {
         listaVentas.setLayoutManager(new LinearLayoutManager(getActivity()));
         listaVentas.setHasFixedSize(true);
 
-        cargarNegocio();
+        if (user != null) {
+            cargarNegocio();
+        }
         botones();
 
         return binding.getRoot();
@@ -63,7 +70,6 @@ public class HomeFragment extends Fragment {
 
     private void cargarNegocio() {
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         //Solo obtenemos los documentos de acuerdo a la fecha actual
         db.collection(user.getEmail()).document("Negocio").collection("fechas")
@@ -151,7 +157,7 @@ public class HomeFragment extends Fragment {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         //Setup Dialog
-        builder = new AlertDialog.Builder(getActivity());
+        builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogStyle);
         builder.setMessage("¿Deseas terminar el dia?");
 
         builder.setPositiveButton("Sí", (dialogInterface, i) -> {
@@ -159,7 +165,6 @@ public class HomeFragment extends Fragment {
             db.collection(user.getEmail()).document("Ganancias")
                     .collection("fechas").document(fechaActual.fechaActual()).set(datosDia);
 
-            //db.collection("Ganancias").document(fechaActual.fechaActual()).set(datosDia);
             Toast.makeText(getActivity(), "Día Cerrado", Toast.LENGTH_SHORT).show();
         });
 
@@ -169,6 +174,13 @@ public class HomeFragment extends Fragment {
 
         dialog = builder.create();
         dialog.show();
+
+        // Cambiar el color del texto y los botones del AlertDialog
+        int textColor = ContextCompat.getColor(getActivity(), R.color.white);
+        Button positive = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        positive.setTextColor(textColor);
+        Button negative = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+        negative.setTextColor(textColor);
     }
 
     private void botones() {

@@ -3,4 +3,15 @@
         <item name="colorPrimary">@color/background</item>
         <item name="android:statusBarColor" tools:targetApi="l">@color/background</item>
     </style>
+
+    <!-- Cambia el color de un AlertDialog-->
+    <style name="AlertDialogStyle" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
+        <!-- Cambia el fondo del AlertDialog -->
+        <item name="android:windowBackground">@color/background_claro</item>
+        <!-- Cambia el color de los botones "Sí" y "No" -->
+        <item name="colorAccent">@color/color_primary</item>
+        <!-- Cambia el color del texto del mensaje -->
+        <item name="android:colorPrimary">@color/white</item>
+    </style>
+
 </resources>

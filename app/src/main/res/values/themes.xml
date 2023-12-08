@@ -14,4 +14,15 @@
     <style name="Theme.MiNegocio.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.MiNegocio.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <!-- Cambia el color de un AlertDialog-->
+    <style name="AlertDialogStyle" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
+        <!-- Cambia el fondo del AlertDialog -->
+        <item name="android:windowBackground">@color/background_claro</item>
+        <!-- Cambia el color de los botones "Sí" y "No" -->
+        <item name="colorAccent">@color/color_primary</item>
+        <!-- Cambia el color del texto del mensaje -->
+        <item name="android:colorPrimary">@color/white</item>
+    </style>
+
 </resources>

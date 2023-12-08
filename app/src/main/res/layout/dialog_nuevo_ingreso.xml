@@ -108,8 +108,8 @@
                 android:layout_marginStart="10sp"
                 android:background="@android:color/transparent"
                 android:clickable="false"
-                android:focusable="false"
                 android:ellipsize="none"
+                android:focusable="false"
                 android:gravity="center_vertical"
                 android:hint="Fecha"
                 android:inputType="text"
@@ -140,9 +140,9 @@
                 android:id="@+id/tipoEditText"
                 android:layout_width="match_parent"
                 android:layout_height="50sp"
+                android:layout_marginStart="10dp"
                 android:background="@android:color/transparent"
                 android:clickable="true"
-                android:layout_marginStart="10dp"
                 android:editable="false"
                 android:ellipsize="none"
                 android:focusable="false"
@@ -152,15 +152,14 @@
         </LinearLayout>
 
 
-
         <Button
             android:id="@+id/aceptarButton"
             android:layout_width="match_parent"
             android:layout_height="50sp"
-            android:gravity="center"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="20sp"
             android:background="@drawable/background_button"
+            android:gravity="center"
             android:text="Aceptar"
             android:textAllCaps="false"
             android:textColor="@color/white"

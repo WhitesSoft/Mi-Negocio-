@@ -10,4 +10,6 @@
     <color name="black">#FF000000</color>
     <color name="colorHint">#767676</color>
     <color name="grayBackgroundTraslucent">#B3D5D5D5</color>
+
+    <color name="color_primary">#FF7004</color>
 </resources>
